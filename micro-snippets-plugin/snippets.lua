@@ -1,4 +1,4 @@
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 local micro = import("micro")
 local buffer = import("micro/buffer")
@@ -212,6 +212,10 @@ function Snippet.Prepare(self)
 				placeHolders.value = value
 			end
 		end
+		-- allow escaped shell vars like '${\1:?foo}'
+		--   str:gsub(ptn, repl[, num])
+		local esc_ptn = "(${)\\(%d+:?[^}]*})"
+		self.code = self.code:gsub(esc_ptn, "%1%2")
 	end
 end
 
